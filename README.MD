@@ -47,7 +47,7 @@ Explicação:
 - `-u "http://localhost:5000/user?id=1"`: URL do endpoint com o parâmetro `id`.
 - `--dbs`: Solicita ao sqlmap que recupere o nome dos bancos de dados disponíveis.
 - `--risk=3 --level=5`: Define o nível de risco e o nível de teste do sqlmap para realizar testes mais agressivos e profundos.
--- `--batch`: Modo automatizado, sem prompts de interação.
+- `--batch`: Modo automatizado, sem prompts de interação.
 
 Este teste irá verificar se a aplicação está vulnerável a SQL Injection no parâmetro `id` e buscará detalhes do banco de dados.
 
@@ -64,7 +64,7 @@ Explicação:
 - `-u "http://localhost:5000/login"`: URL do endpoint de login.
 - `--data "email=admin@example.com&password=' OR '1'='1"`: Envia dados de login com uma injeção SQL no parâmetro `password`.
 - `--risk=3 --level=5`: Configura os níveis de risco e profundidade de teste.
--- `--batch`: Modo automatizado, sem prompts de interação.
+- `--batch`: Modo automatizado, sem prompts de interação.
 
 Este comando irá testar se é possível realizar um login bypass usando SQL Injection, explorando a falha no parâmetro `password`.
 
@@ -81,7 +81,7 @@ Explicação:
 - `-u "http://localhost:5000/create_user"`: URL do endpoint de criação de usuário.
 - `--data "name=Test&email=test@example.com&password=' OR '1'='1"`: Envia dados com injeção SQL no parâmetro `password`.
 - `--risk=3 --level=5`: Configura os níveis de risco e profundidade de teste.
--- `--batch`: Modo automatizado, sem prompts de interação.
+- `--batch`: Modo automatizado, sem prompts de interação.
 
 Este teste verifica se é possível criar um novo usuário através de uma injeção SQL no parâmetro `password`.
 
@@ -98,7 +98,7 @@ Explicação:
 - `-u "http://localhost:5000/edit_user?id=1"`: URL do endpoint de edição de usuário.
 - `--data "name=UpdatedName&email=updated@example.com&password=' OR '1'='1"`: Envia dados de edição com uma injeção SQL no parâmetro `password`.
 - `--risk=3 --level=5`: Configura os níveis de risco e profundidade de teste.
--- `--batch`: Modo automatizado, sem prompts de interação.
+- `--batch`: Modo automatizado, sem prompts de interação.
 
 Este teste irá verificar se é possível alterar os dados de um usuário existente através de uma injeção SQL no parâmetro `password`.
 
@@ -114,7 +114,7 @@ Explicação:
 
 - `-u "http://localhost:5000/delete_user?id=1"`: URL do endpoint de deletação de usuário.
 - `--risk=3 --level=5`: Configura os níveis de risco e profundidade de teste.
--- `--batch`: Modo automatizado, sem prompts de interação.
+- `--batch`: Modo automatizado, sem prompts de interação.
 
 Este teste verificará se é possível deletar um usuário utilizando uma injeção SQL no parâmetro `id`.
 
