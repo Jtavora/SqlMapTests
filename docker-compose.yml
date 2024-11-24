@@ -10,6 +10,8 @@ services:
       POSTGRES_DB: testdb
     ports:
       - "5432:5432"
+    networks:
+      - mynet
 
   web:
     build: .
@@ -21,3 +23,9 @@ services:
     depends_on:
       - db
     command: python app.py
+    networks:
+      - mynet
+      
+networks:
+  mynet:
+    driver: bridge
