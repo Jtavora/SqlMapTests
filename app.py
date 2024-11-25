@@ -13,26 +13,6 @@ def get_db_connection():
     conn = psycopg2.connect(os.getenv("DATABASE_URL"))
     return conn
 
-# Conectar ao banco de dados PostgreSQL
-DATABASE_URL = os.getenv("DATABASE_URL")
-conn = psycopg2.connect(DATABASE_URL)
-cursor = conn.cursor()
-
-# Criar a tabela de usuários (caso não exista)
-cursor.execute(''' 
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
-    email TEXT,
-    password TEXT
-) 
-''')
-
-# Inserir alguns dados de exemplo
-cursor.execute("INSERT INTO users (name, email, password) VALUES ('John Doe', 'john@example.com', 'password123')")
-cursor.execute("INSERT INTO users (name, email, password) VALUES ('Jane Smith', 'jane@example.com', 'password123')")
-conn.commit()
-
 @app.route('/', methods=['GET'])
 def index():
     """
