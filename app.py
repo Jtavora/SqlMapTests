@@ -8,25 +8,10 @@ app = Flask(__name__)
 # Configuração do Swagger
 swagger = Swagger(app)
 
-# Conectar ao banco de dados PostgreSQL
-DATABASE_URL = os.getenv("DATABASE_URL")
-conn = psycopg2.connect(DATABASE_URL)
-cursor = conn.cursor()
-
-# Criar a tabela de usuários (caso não exista)
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
-    email TEXT,
-    password TEXT
-)
-''')
-
-# Inserir alguns dados de exemplo
-cursor.execute("INSERT INTO users (name, email, password) VALUES ('John Doe', 'john@example.com', 'password123')")
-cursor.execute("INSERT INTO users (name, email, password) VALUES ('Jane Smith', 'jane@example.com', 'password123')")
-conn.commit()
+# Função para obter a conexão com o banco de dados
+def get_db_connection():
+    conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+    return conn
 
 @app.route('/', methods=['GET'])
 def index():
@@ -68,17 +53,19 @@ def get_user():
       404:
         description: Usuário não encontrado
     """
-    user_id = request.args.get('id')  # Recupera o parâmetro 'id' da URL
+    user_id = request.args.get('id')
 
-    # Vulnerabilidade de SQL Injection (não usa parâmetros preparados)
-    query = f"SELECT * FROM users WHERE id = {user_id}"
-    cursor.execute(query)
-    result = cursor.fetchall()
+    # Usando o gerenciador de contexto para garantir que a conexão e o cursor sejam fechados
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            query = f"SELECT * FROM users WHERE id = {user_id}"
+            cursor.execute(query)
+            result = cursor.fetchall()
 
-    if result:
-        return jsonify({'id': result[0][0], 'name': result[0][1], 'email': result[0][2]})
-    else:
-        return jsonify({'error': 'User not found'}), 404
+            if result:
+                return jsonify({'id': result[0][0], 'name': result[0][1], 'email': result[0][2]})
+            else:
+                return jsonify({'error': 'User not found'}), 404
 
 @app.route('/users', methods=['GET'])
 def get_all_users():
@@ -103,11 +90,14 @@ def get_all_users():
                 type: string
                 description: E-mail do usuário
     """
-    query = "SELECT * FROM users"
-    cursor.execute(query)
-    result = cursor.fetchall()
+    # Usando o gerenciador de contexto para garantir que a conexão e o cursor sejam fechados
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            query = "SELECT * FROM users"
+            cursor.execute(query)
+            result = cursor.fetchall()
 
-    users = [{'id': row[0], 'name': row[1], 'email': row[2]} for row in result]
+            users = [{'id': row[0], 'name': row[1], 'email': row[2]} for row in result]
 
     return jsonify(users)
 
@@ -145,19 +135,20 @@ def login():
       401:
         description: Credenciais inválidas
     """
-    # Recuperando os parâmetros 'email' e 'password' do corpo da requisição
     email = request.form['email']
     password = request.form['password']
 
-    # Vulnerabilidade de SQL Injection (não usa parâmetros preparados)
-    query = f"SELECT * FROM users WHERE email = '{email}' AND password = '{password}'"
-    cursor.execute(query)
-    result = cursor.fetchall()
+    # Usando o gerenciador de contexto para garantir que a conexão e o cursor sejam fechados
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            query = f"SELECT * FROM users WHERE email = '{email}' AND password = '{password}'"
+            cursor.execute(query)
+            result = cursor.fetchall()
 
-    if result:
-        return jsonify({'message': 'Login successful', 'user': {'id': result[0][0], 'name': result[0][1], 'email': result[0][2]}})
-    else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+            if result:
+                return jsonify({'message': 'Login successful', 'user': {'id': result[0][0], 'name': result[0][1], 'email': result[0][2]}})
+            else:
+                return jsonify({'error': 'Invalid credentials'}), 401
 
 @app.route('/create_user', methods=['POST'])
 def create_user():
@@ -188,10 +179,12 @@ def create_user():
     email = request.form['email']
     password = request.form['password']
 
-    # Vulnerabilidade de SQL Injection (não usa parâmetros preparados)
-    query = f"INSERT INTO users (name, email, password) VALUES ('{name}', '{email}', '{password}')"
-    cursor.execute(query)
-    conn.commit()
+    # Usando o gerenciador de contexto para garantir que a conexão e o cursor sejam fechados
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            query = f"INSERT INTO users (name, email, password) VALUES ('{name}', '{email}', '{password}')"
+            cursor.execute(query)
+            conn.commit()
 
     return jsonify({'message': 'User created successfully'}), 201
 
@@ -230,10 +223,12 @@ def edit_user():
     email = request.form['email']
     password = request.form['password']
 
-    # Vulnerabilidade de SQL Injection (não usa parâmetros preparados)
-    query = f"UPDATE users SET name = '{name}', email = '{email}', password = '{password}' WHERE id = {user_id}"
-    cursor.execute(query)
-    conn.commit()
+    # Usando o gerenciador de contexto para garantir que a conexão e o cursor sejam fechados
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            query = f"UPDATE users SET name = '{name}', email = '{email}', password = '{password}' WHERE id = {user_id}"
+            cursor.execute(query)
+            conn.commit()
 
     return jsonify({'message': 'User updated successfully'})
 
@@ -254,10 +249,12 @@ def delete_user():
     """
     user_id = request.args.get('id')
 
-    # Vulnerabilidade de SQL Injection (não usa parâmetros preparados)
-    query = f"DELETE FROM users WHERE id = {user_id}"
-    cursor.execute(query)
-    conn.commit()
+    # Usando o gerenciador de contexto para garantir que a conexão e o cursor sejam fechados
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            query = f"DELETE FROM users WHERE id = {user_id}"
+            cursor.execute(query)
+            conn.commit()
 
     return jsonify({'message': 'User deleted successfully'})
 

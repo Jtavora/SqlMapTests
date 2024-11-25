@@ -56,7 +56,7 @@ Este teste irá verificar se a aplicação está vulnerável a SQL Injection no 
 Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no endpoint de login:
 
  ```bash
-python3 sqlmap.py -u "http://localhost:5000/login" --batch --data "email=admin@example.com&password=password123" --risk=3 --level=5
+python3 sqlmap.py -u "http://localhost:5000/login" --batch --ignore-code 401 --data "email=john%40example.com&password=password123" --risk=3 --level=5
  ```
 
 Explicação:
