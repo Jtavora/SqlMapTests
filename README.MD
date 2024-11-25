@@ -40,6 +40,9 @@ Execute o seguinte comando para testar a vulnerabilidade de SQL Injection no end
 
  ```bash
     python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --dbs --risk=3 --level=5
+    python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --columns --risk=3 --level=5
+    python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --current-user --risk=3 --level=5
+    python3 sqlmap.py -u "http://localhost:5000/user?id=1" --batch --ignore-code 404 --current-db --risk=3 --level=5
  ```
 
 Explicação:
@@ -48,6 +51,10 @@ Explicação:
 - `--dbs`: Solicita ao sqlmap que recupere o nome dos bancos de dados disponíveis.
 - `--risk=3 --level=5`: Define o nível de risco e o nível de teste do sqlmap para realizar testes mais agressivos e profundos.
 - `--batch`: Modo automatizado, sem prompts de interação.
+- `--ignore-code 404`: Ignora respostas com código de status 404.
+- `--columns`: Solicita ao sqlmap que recupere os nomes das colunas da tabela.
+- `--current-user`: Solicita ao sqlmap que recupere o nome do usuário atual do banco de dados.
+- `--current-db`: Solicita ao sqlmap que recupere o nome do banco de dados atual.
 
 Este teste irá verificar se a aplicação está vulnerável a SQL Injection no parâmetro `id` e buscará detalhes do banco de dados.
 
@@ -65,6 +72,7 @@ Explicação:
 - `--data "email=admin@example.com&password=' OR '1'='1"`: Envia dados de login com uma injeção SQL no parâmetro `password`.
 - `--risk=3 --level=5`: Configura os níveis de risco e profundidade de teste.
 - `--batch`: Modo automatizado, sem prompts de interação.
+- `--ignore-code 401`: Ignora respostas com código de status 401.
 
 Este comando irá testar se é possível realizar um login bypass usando SQL Injection, explorando a falha no parâmetro `password`.
 
