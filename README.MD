@@ -25,8 +25,8 @@ Para rodar a aplicação, você pode usar o Docker com o `docker-compose`.
 1. Clone este repositório:
 
    ```bash
-   git clone <URL do repositório>
-   cd <diretório do repositório>
+   git clone https://github.com/Jtavora/SqlMapTests.git
+   cd SqlMapTests
    ```
 2. Execute o Docker Compose para iniciar a aplicação:
 
